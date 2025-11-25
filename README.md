@@ -117,14 +117,36 @@ forge script script/Diamond.s.sol:DiamondScript \
 
 ### Interact with the Diamond
 
-After deployment, you can call functions on the Diamond address:
+After deployment, use the interaction script to call functions on the deployed Diamond:
 
-```solidity
-// The Diamond address will have all CounterFacet functions
-IDiamondCut diamond = IDiamondCut(diamondAddress);
-diamond.increment();  // Works because CounterFacet was added
-diamond.getCount();   // Returns the count
+**Using environment variable:**
+```shell
+export DIAMOND_ADDRESS=0xYourDiamondAddress
+forge script script/InteractDiamond.s.sol:InteractDiamondScript \
+    --rpc-url $SEPOLIA_RPC_URL \
+    --private-key $PRIVATE_KEY \
+    --broadcast
 ```
+
+**Or inline:**
+```shell
+DIAMOND_ADDRESS=0xYourDiamondAddress forge script script/InteractDiamond.s.sol:InteractDiamondScript \
+    --rpc-url $SEPOLIA_RPC_URL \
+    --private-key $PRIVATE_KEY \
+    --broadcast
+```
+
+**Read-only calls (no broadcast):**
+```shell
+DIAMOND_ADDRESS=0xYourDiamondAddress forge script script/InteractDiamond.s.sol:InteractDiamondScript \
+    --rpc-url $SEPOLIA_RPC_URL
+```
+
+The script will:
+- Get the current count
+- Call `increment()` twice
+- Call `decrement()` once
+- Display the final count
 
 ## Key Features
 
